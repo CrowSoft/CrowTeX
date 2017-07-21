@@ -97,12 +97,13 @@ class Editor(QtGui.QMainWindow):
     def file_compile(self):
         if self.fileName == ' ':
             self.file_save_as()
-        
-        os.system("pdflatex "+ self.fileName)
+            
+        directory = re.sub('/[^/]*?\.tex','',self.fileName) 
+        os.system('pdflatex -output-directory '+ directory + ' ' + self.fileName)
         self.show_pdf()
     
     def show_pdf(self):
-        pdf_name = str(re.sub('\.tex$','.pdf',self.fileName))
+        pdf_name = re.sub('\.tex$','.pdf',self.fileName)
         self.pdf_doc = popplerqt4.Poppler.Document.load(pdf_name)
         self.page = self.pdf_doc.page(0)
         self.image = self.page.renderToImage(300,300)
